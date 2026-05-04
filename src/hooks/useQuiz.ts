@@ -11,13 +11,14 @@ export const useQuiz = (categoryId: string) => {
 
   useEffect(() => {
     const loadQuestions = async () => {
-      try {
-        const data = await QuizRepository.getQuestionsByCategory(categoryId);
-        setQuestions(data);
-      } finally {
-        setLoading(false);
-      }
-    };
+  try {
+    // CHANGE THIS: Call getQuestionsByCategorySlug instead of ID
+    const data = await QuizRepository.getQuestionsByCategorySlug(categoryId);
+    setQuestions(data);
+  } finally {
+    setLoading(false);
+  }
+};
     loadQuestions();
   }, [categoryId]);
 

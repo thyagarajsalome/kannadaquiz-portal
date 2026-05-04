@@ -1,15 +1,16 @@
-export interface Question {
+export interface Category {
   id: string;
-  text_kn: string;     // Question text in Kannada
-  options: string[];   // Array of 4 options
-  correct_index: number;
-  explanation_kn?: string; // Why this is the answer
+  name_kn: string;
+  slug: string;
+  description?: string;
+  created_at?: string;
 }
 
-export interface QuizSession {
+export interface Question {
   id: string;
-  userId: string;
-  score: number;
-  startTime: Date;
-  isCompleted: boolean;
+  category_id: string;
+  text_kn: string;
+  options: string[];
+  correct_index: number;
+  explanation_kn?: string;
 }

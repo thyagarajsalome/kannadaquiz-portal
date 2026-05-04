@@ -1,16 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BookOpen, Trophy, Zap, ArrowRight } from 'lucide-react';
+import { QuizRepository } from '../api/repositories/QuizRepository';
+import { Category } from '../types/quiz';
+import { BookOpen, ArrowRight, Loader2 } from 'lucide-react';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  // In a real app, these would come from your Supabase 'categories' table
-  const featuredCategories = [
-    { id: 'kpsc-general', name: 'General Kannada', count: '1,200+ Qs', icon: <BookOpen className="w-6 h-6" /> },
-    { id: 'current-affairs', name: 'Daily Current Affairs', count: 'Daily Updates', icon: <Zap className="w-6 h-6" /> },
-    { id: 'history', name: 'Karnataka History', count: '850+ Qs', icon: <Trophy className="w-6 h-6" /> },
-  ];
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await QuizRepository.getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error('Error loading categories:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   return (
     <div className="flex flex-col gap-16 py-10">
@@ -28,38 +40,46 @@ export const Home: React.FC = () => {
           </h1>
           <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
             Master Kannada competitive exams with our AI-powered quiz platform. 
-            Automated daily updates for FDA, SDA, and KPSC aspirants.
+            Daily updates for FDA, SDA, and KPSC aspirants.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button 
-              onClick={() => navigate('/quiz/all')}
+              onClick={() => navigate('/quiz/kpsc-general')}
               className="w-full sm:w-auto px-8 py-4 bg-indigo-600 text-white font-bold rounded-xl shadow-lg hover:bg-indigo-700 transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2"
             >
               Start Free Quiz <ArrowRight className="w-5 h-5" />
-            </button>
-            <button className="w-full sm:w-auto px-8 py-4 bg-white text-slate-700 font-bold rounded-xl border border-slate-200 shadow-sm hover:bg-slate-50 transition-all">
-              View Leaderboard
             </button>
           </div>
         </div>
       </section>
 
-      {/* --- FEATURED CATEGORIES --- */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
-        {featuredCategories.map((cat) => (
-          <div 
-            key={cat.id}
-            className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
-            onClick={() => navigate(`/quiz/${cat.id}`)}
-          >
-            <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-              {cat.icon}
-            </div>
-            <h3 className="text-xl font-bold text-slate-900 mb-1">{cat.name}</h3>
-            <p className="text-slate-500 text-sm">{cat.count}</p>
+      {/* --- DYNAMIC CATEGORIES --- */}
+      <section className="px-4">
+        <h2 className="text-2xl font-bold text-slate-900 mb-8">ವಿಷಯಗಳು (Categories)</h2>
+        
+        {loading ? (
+          <div className="flex flex-col items-center py-20 text-slate-400">
+            <Loader2 className="w-10 h-10 animate-spin mb-4" />
+            <p>Loading Quiz categories...</p>
           </div>
-        ))}
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {categories.map((cat) => (
+              <div 
+                key={cat.id}
+                className="p-6 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+                onClick={() => navigate(`/quiz/${cat.slug}`)}
+              >
+                <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center mb-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                  <BookOpen className="w-6 h-6" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 mb-1">{cat.name_kn}</h3>
+                <p className="text-slate-500 text-sm">Tap to start practice</p>
+              </div>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
