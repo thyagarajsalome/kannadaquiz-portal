@@ -2,9 +2,9 @@
   "version": 1,
   "skills": {
     "developing-genkit-dart": {
-      "source": "firebase/agent-skills",
+      "source": "thyagarajsalome/kannadaquiz-portal",
       "sourceType": "github",
-      "skillPath": "skills/developing-genkit-dart/SKILL.md",
+      "skillPath": ".agents/skills/developing-genkit-dart/SKILL.md",
       "computedHash": "ba0025db33c95d8b66cd6de1f4c25b8b70456fb2789ec6c97cd88d432eed3fb3"
     },
     "developing-genkit-go": {
@@ -44,9 +44,9 @@
       "computedHash": "65e6f78dc3c9ea7896d65089899b0bd1060641b7756decd693e3179fe295456f"
     },
     "firebase-basics": {
-      "source": "firebase/agent-skills",
+      "source": "thyagarajsalome/kannadaquiz-portal",
       "sourceType": "github",
-      "skillPath": "skills/firebase-basics/SKILL.md",
+      "skillPath": ".agents/skills/firebase-basics/SKILL.md",
       "computedHash": "c4ab39910ea78bfb05d7e05f172600219f98b2e809d6c245292bb2c92a46e08b"
     },
     "firebase-crashlytics": {
@@ -62,9 +62,9 @@
       "computedHash": "3846924ba4a091fca5797b1c4882963867f43558692704ab240a46a54b37f7ef"
     },
     "firebase-firestore": {
-      "source": "firebase/agent-skills",
+      "source": "thyagarajsalome/kannadaquiz-portal",
       "sourceType": "github",
-      "skillPath": "skills/firebase-firestore/SKILL.md",
+      "skillPath": ".agents/skills/firebase-firestore/SKILL.md",
       "computedHash": "be164bf442cf6cadd24b25e5a2db7e8ba5413837e5ba634a231bf7700a7c0e0a"
     },
     "firebase-hosting-basics": {
@@ -74,9 +74,9 @@
       "computedHash": "0688a8ad6cb72149924352cc47e6cc8bf815e944b636a67b9da225cc9b025afc"
     },
     "firebase-security-rules-auditor": {
-      "source": "firebase/agent-skills",
+      "source": "thyagarajsalome/kannadaquiz-portal",
       "sourceType": "github",
-      "skillPath": "skills/firebase-security-rules-auditor/SKILL.md",
+      "skillPath": ".agents/skills/firebase-security-rules-auditor/SKILL.md",
       "computedHash": "42e793406ca8980c47fcdbd309f02838316849bcbf8475001b4ecaa6a67606b8"
     },
     "xcode-project-setup": {
