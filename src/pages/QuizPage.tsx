@@ -1,54 +1,81 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuiz } from '../hooks/useQuiz';
+// src/pages/QuizPage.tsx
+import React, { useState } from 'react';
+import { QuizCard } from '../components/QuizCard';
+import { Question } from '../types/quiz';
+
+// Our sample Kannada questions
+const SAMPLE_QUESTIONS: Question[] = [
+  {
+    id: 1,
+    text: "ಕರ್ನಾಟಕದ ರಾಜಧಾನಿ ಯಾವುದು?",
+    options: ["ಮೈಸೂರು", "ಬೆಂಗಳೂರು", "ಹುಬ್ಬಳ್ಳಿ", "ಮಂಗಳೂರು"],
+    correctAnswer: "ಬೆಂಗಳೂರು"
+  },
+  {
+    id: 2,
+    text: "ಕನ್ನಡದ ಮೊದಲ ಶಾಸನ ಯಾವುದು?",
+    options: ["ಹಲ್ಮಿಡಿ ಶಾಸನ", "ಬಾದಾಮಿ ಶಾಸನ", "ಶ್ರವಣಬೆಳಗೊಳ ಶಾಸನ", "ಅಶೋಕನ ಶಾಸನ"],
+    correctAnswer: "ಹಲ್ಮಿಡಿ ಶಾಸನ"
+  },
+  {
+    id: 3,
+    text: "ಕರ್ನಾಟಕದ ರಾಜ್ಯ ಪ್ರಾಣಿ ಯಾವುದು?",
+    options: ["ಹುಲಿ", "ಆನೆ", "ಸಿಂಹ", "ಚಿರತೆ"],
+    correctAnswer: "ಆನೆ"
+  }
+];
 
 export const QuizPage: React.FC = () => {
-  const { categoryId } = useParams();
-  const navigate = useNavigate();
-  const { questions, currentIndex, score, loading, isFinished, handleAnswer } = useQuiz(categoryId!);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [score, setScore] = useState(0);
+  const [showResults, setShowResults] = useState(false);
 
-  if (loading) return <div className="text-center py-20">Loading Questions...</div>;
-  
-  if (isFinished) return (
-    <div className="max-w-md mx-auto text-center p-8 bg-white rounded-2xl shadow-xl">
-      <h2 className="text-3xl font-bold mb-4">Quiz Completed!</h2>
-      <p className="text-5xl font-extrabold text-indigo-600 mb-6">{score} / {questions.length}</p>
-      <button 
-        onClick={() => navigate('/')}
-        className="px-6 py-2 bg-indigo-600 text-white rounded-lg font-bold"
-      >
-        Back to Home
-      </button>
-    </div>
-  );
+  const handleNextQuestion = (isCorrect: boolean) => {
+    if (isCorrect) setScore(prev => prev + 1);
 
-  const currentQuestion = questions[currentIndex];
+    if (currentIndex < SAMPLE_QUESTIONS.length - 1) {
+      setCurrentIndex(prev => prev + 1);
+    } else {
+      setShowResults(true);
+    }
+  };
+
+  const restartQuiz = () => {
+    setCurrentIndex(0);
+    setScore(0);
+    setShowResults(false);
+  };
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <div className="mb-8">
-        <span className="text-sm font-medium text-slate-500">Question {currentIndex + 1} of {questions.length}</span>
-        <div className="w-full bg-slate-200 h-2 rounded-full mt-2">
-          <div 
-            className="bg-indigo-600 h-2 rounded-full transition-all" 
-            style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+      {!showResults ? (
+        <div className="w-full">
+          <div className="text-center mb-6 text-gray-500 font-medium">
+            ಪ್ರಶ್ನೆ (Question) {currentIndex + 1} / {SAMPLE_QUESTIONS.length}
+          </div>
+          <QuizCard 
+            question={SAMPLE_QUESTIONS[currentIndex]} 
+            onNext={handleNextQuestion}
+            isLast={currentIndex === SAMPLE_QUESTIONS.length - 1}
           />
         </div>
-      </div>
-
-      <h2 className="text-2xl font-bold text-slate-900 mb-8">{currentQuestion.text_kn}</h2>
-
-      <div className="grid gap-4">
-        {currentQuestion.options.map((option, idx) => (
+      ) : (
+        <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">ಫಲಿತಾಂಶಗಳು (Results)</h2>
+          <p className="text-xl mb-6">
+            ನಿಮ್ಮ ಅಂಕಗಳು (Your Score): <br/>
+            <span className="text-4xl font-extrabold text-blue-600 mt-2 inline-block">
+              {score} / {SAMPLE_QUESTIONS.length}
+            </span>
+          </p>
           <button
-            key={idx}
-            onClick={() => handleAnswer(idx)}
-            className="w-full text-left p-5 rounded-xl border-2 border-slate-100 hover:border-indigo-500 hover:bg-indigo-50 transition-all font-medium"
+            onClick={restartQuiz}
+            className="w-full bg-gray-800 text-white font-semibold py-3 rounded-xl hover:bg-gray-900 transition-colors"
           >
-            {option}
+            ಮರುಪ್ರಾರಂಭಿಸಿ (Restart)
           </button>
-        ))}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

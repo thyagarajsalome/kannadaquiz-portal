@@ -33,3 +33,11 @@ export interface Quiz {
   category_id: string;
   created_at: string;
 }
+
+// src/types/quiz.ts
+export interface Question {
+  id: string;
+  text: string;
+  options: string[];
+  correctAnswer: string;
+}
